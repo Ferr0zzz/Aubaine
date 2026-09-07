@@ -1,0 +1,16 @@
+# Local development
+node_modules/
+.vercel/
+.env
+.env.*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Test and coverage output
+coverage/
+*.log

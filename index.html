@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aubaine — Le radar à bonnes affaires jeux vidéo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Aubaine compare les meilleures offres de jeux PC en temps réel.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="status-bar" role="status" aria-live="polite">
+  <div class="status-left">
+    <span class="logo-mark">◆ AUBAINE</span>
+    <span><span class="live-dot"></span><b id="statCount">—</b> offres en direct</span>
+    <span id="fxLine">Taux USD→EUR : —</span>
+  </div>
+  <div class="currency-toggle">
+    <button id="curUSD" class="active" aria-pressed="true">USD</button>
+    <button id="curEUR" aria-pressed="false">EUR</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Chasse aux bonnes affaires · prix en euros</div>
+      <h1 class="title">Une <em>aubaine</em>,<br>ça ne se rate pas.</h1>
+      <p class="hero-sub">Le flux en direct des meilleures remises PC, converties en euros, avec comparateur multi-boutiques et un rayon 100&nbsp;% gratuit.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><b id="statFree">—</b><span>100% gratuits</span></div>
+        <div class="hero-stat"><b id="statAvg">—</b><span>Remise moyenne</span></div>
+        <div class="hero-stat"><b id="statFav">0</b><span>Mes favoris</span></div>
+      </div>
+    </div>
+    <div class="spotlight" id="spotlight">
+      <div class="spotlight-img"><div class="spotlight-scan"></div></div>
+      <div class="spotlight-body">
+        <div class="spotlight-title">Chargement…</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="filter-bar">
+  <div class="filter-inner">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="relevance">Pertinence</button>
+      <button class="tab-btn" data-tab="free">100% gratuit</button>
+      <button class="tab-btn" data-tab="favorites">★ Mes favoris <span class="count" id="favCount">(0)</span></button>
+    </div>
+    <div class="controls-grid" id="controlsGrid">
+      <div class="field">
+        <label for="searchInput">Rechercher un jeu</label>
+        <input type="search" id="searchInput" placeholder="ex : Hades, Elden Ring…" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="storeSelect">Boutique</label>
+        <select id="storeSelect"><option value="">Toutes</option></select>
+      </div>
+      <div class="field">
+        <label for="sortSelect">Trier par</label>
+        <select id="sortSelect">
+          <option value="Deal Rating">Pertinence</option>
+          <option value="Savings">Remise (%)</option>
+          <option value="Price">Prix le plus bas</option>
+          <option value="Metacritic Score">Note Metacritic</option>
+          <option value="Reviews">Avis Steam</option>
+          <option value="Recent">Récent</option>
+        </select>
+      </div>
+      <div class="field" id="minRatingField">
+        <label for="minRating">Note Steam min. <span class="range-val" id="minRatingVal">0%</span></label>
+        <input type="range" id="minRating" min="0" max="95" step="5" value="0">
+      </div>
+      <div class="field" id="maxPriceField">
+        <label for="maxPrice">Prix max <span class="range-val" id="maxPriceVal">60$</span></label>
+        <input type="range" id="maxPrice" min="0" max="60" step="5" value="60">
+      </div>
+       <button class="reset-filters" id="resetFilters" type="button">Réinitialiser</button>
+    </div>
+  </div>
+</nav>
+
+<div class="results-meta">
+  <div><b id="resultCount">0</b> jeu(x) affiché(s)</div>
+  <div id="resultSubtitle">Mode : pertinence</div>
+</div>
+
+<main class="grid-wrap">
+  <div class="grid" id="grid" aria-live="polite" aria-busy="true"></div>
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+    <button class="load-more" id="loadMoreBtn">Voir plus d'offres</button>
+  </div>
+</main>
+
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modal"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<footer>
+  Aubaine agrège des offres publiques et convertit les prix en euros à titre indicatif — vérifiez toujours le prix final chez le marchand.
+</footer>
+
+<script type="module" src="src/app.js"></script>
+</body>
+</html>
