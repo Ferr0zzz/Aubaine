@@ -1,6 +1,6 @@
 import { DEFAULT_FX_RATE, PAGE_SIZE } from './config.js';
 import { api } from './services/api.js';
-import { loadFavorites, saveFavorites } from './services/storage.js';
+import { loadFavorites, loadPreferences, saveFavorites, savePreferences } from './services/storage.js';
 import { createFormatter, escapeHtml } from './utils/format.js';
 import { renderCards, renderMessage, renderSkeletons, renderSpotlight } from './ui/render.js';
 
@@ -14,9 +14,8 @@ const elements = Object.fromEntries([
 ].map((id) => [id, $(id)]));
 
 const state = {
-  mode: 'relevance',
+  ...loadPreferences(),
   page: 0,
-  currency: 'USD',
   fxRate: DEFAULT_FX_RATE,
   stores: {},
   favorites: loadFavorites(),
@@ -36,6 +35,18 @@ function showToast(message) {
 function syncFavoriteStats() {
   elements.favCount.textContent = `(${state.favorites.size})`;
   elements.statFav.textContent = state.favorites.size;
+}
+
+function saveBrowserPreferences() {
+  savePreferences({
+    mode: state.mode,
+    currency: state.currency,
+    search: elements.searchInput.value,
+    storeId: elements.storeSelect.value,
+    sortBy: elements.sortSelect.value,
+    minRating: elements.minRating.value,
+    maxPrice: elements.maxPrice.value
+  });
 }
 
 function toggleFavorite(deal) {
@@ -191,6 +202,7 @@ async function openModal(deal) {
 
 function setMode(mode) {
   state.mode = mode;
+  saveBrowserPreferences();
   document.querySelectorAll('.tab-btn').forEach((button) => button.classList.toggle('active', button.dataset.tab === mode));
   elements.resultSubtitle.textContent = { relevance: 'Mode : pertinence', free: 'Mode : 100% gratuit', favorites: 'Mode : mes favoris' }[mode];
   updateFilterVisibility();
@@ -209,7 +221,7 @@ function updateFilterVisibility() {
 
 function setCurrency(currency) {
   state.currency = currency;
-  localStorage.setItem('aubaine:currency', currency);
+  saveBrowserPreferences();
   state.format = createFormatter(currency, state.fxRate);
   elements.curUSD.classList.toggle('active', currency === 'USD');
   elements.curEUR.classList.toggle('active', currency === 'EUR');
@@ -228,6 +240,7 @@ function resetFilters() {
   elements.minRatingVal.textContent = '0%';
   elements.maxPrice.value = '60';
   elements.maxPriceVal.textContent = `${elements.maxPrice.value}${state.currency === 'EUR' ? '€' : '$'}`;
+  saveBrowserPreferences();
   showToast('Filtres réinitialisés');
   runSearch();
 }
@@ -266,15 +279,16 @@ document.addEventListener('keydown', (event) => { if (event.key === 'Escape') el
 document.querySelectorAll('.tab-btn').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.tab)));
 elements.curUSD.addEventListener('click', () => setCurrency('USD'));
 elements.curEUR.addEventListener('click', () => setCurrency('EUR'));
-elements.storeSelect.addEventListener('change', () => runSearch());
-elements.sortSelect.addEventListener('change', () => runSearch());
+elements.storeSelect.addEventListener('change', () => { saveBrowserPreferences(); runSearch(); });
+elements.sortSelect.addEventListener('change', () => { saveBrowserPreferences(); runSearch(); });
 elements.minRating.addEventListener('input', () => { elements.minRatingVal.textContent = `${elements.minRating.value}%`; });
-elements.minRating.addEventListener('change', () => runSearch());
+elements.minRating.addEventListener('change', () => { saveBrowserPreferences(); runSearch(); });
 elements.maxPrice.addEventListener('input', () => { elements.maxPriceVal.textContent = `${elements.maxPrice.value}${state.currency === 'EUR' ? '€' : '$'}`; });
-elements.maxPrice.addEventListener('change', () => runSearch());
+elements.maxPrice.addEventListener('change', () => { saveBrowserPreferences(); runSearch(); });
 let searchTimer;
 elements.searchInput.addEventListener('input', () => {
   updateFilterVisibility();
+  saveBrowserPreferences();
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => runSearch(), 350);
 });
@@ -282,11 +296,21 @@ elements.loadMoreBtn.addEventListener('click', () => { state.page += 1; runSearc
 elements.resetFilters.addEventListener('click', resetFilters);
 
 async function init() {
-  const savedCurrency = localStorage.getItem('aubaine:currency');
-  if (savedCurrency === 'EUR') setCurrency('EUR');
+  elements.searchInput.value = state.search;
+  elements.sortSelect.value = state.sortBy;
+  elements.minRating.value = state.minRating;
+  elements.minRatingVal.textContent = `${state.minRating}%`;
+  elements.maxPrice.value = state.maxPrice;
+  elements.maxPriceVal.textContent = `${state.maxPrice}${state.currency === 'EUR' ? '€' : '$'}`;
+  setCurrency(state.currency);
   syncFavoriteStats();
   renderSkeletons(elements.grid);
   await Promise.all([loadStores(), loadExchangeRate()]);
+  elements.storeSelect.value = state.storeId;
+  document.querySelectorAll('.tab-btn').forEach((button) => button.classList.toggle('active', button.dataset.tab === state.mode));
+  elements.resultSubtitle.textContent = { relevance: 'Mode : pertinence', free: 'Mode : 100% gratuit', favorites: 'Mode : mes favoris' }[state.mode];
+  updateFilterVisibility();
+  saveBrowserPreferences();
   await Promise.all([runSearch(), loadSpotlight()]);
 }
 

@@ -9,6 +9,7 @@ Radar web des meilleures offres de jeux PC. Aubaine interroge [CheapShark](https
 - filtres boutique, prix maximum et note appliqués au flux de promotions ;
 - tri par pertinence, remise, prix, note ou avis ;
 - onglet des jeux gratuits et favoris persistants dans le navigateur ;
+- préférences de recherche, devise et filtres sauvegardées dans le navigateur utilisé ;
 - conversion USD/EUR avec taux live et valeur de secours ;
 - comparateur multi-boutiques et prix historique ;
 - interface responsive, clavier-friendly et compatible avec la réduction des animations.
@@ -23,6 +24,8 @@ npm run dev
 
 Puis ouvrez l’URL indiquée. L’ouverture directe de `index.html` peut être bloquée par les règles CORS des navigateurs.
 
+Les favoris et préférences sont enregistrés localement dans le navigateur via `localStorage`. Ils restent propres à ce navigateur et à cette adresse du site, sans compte ni synchronisation entre appareils.
+
 Pour vérifier la syntaxe JavaScript avant une mise en ligne :
 
 ```bash
@@ -31,7 +34,7 @@ npm run check
 
 ## Lien Vercel
 
-[Ouvrir Vercel](https://vercel.com/new)
+[Site en ligne](https://aubaine.vercel.app/)
 
 ## Architecture
 
