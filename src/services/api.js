@@ -3,6 +3,7 @@ import { API_BASE, FX_API, PAGE_SIZE } from '../config.js';
 async function request(url, options = {}) {
   const response = await fetch(url, {
     ...options,
+    cache: 'no-store',
     headers: {
       Accept: 'application/json',
       ...(options.headers || {})
