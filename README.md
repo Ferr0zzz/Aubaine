@@ -54,11 +54,3 @@ npm run check
 │       └── format.js       # Échappement HTML, prix et notes
 └── README.md
 ```
-
-## Données et limites
-
-Les données dépendent des APIs publiques CheapShark et Frankfurter. Les prix affichés sont indicatifs : le prix final doit toujours être vérifié chez le marchand. Aucune donnée personnelle n’est collectée.
-
-## Maintenance
-
-Le projet reste volontairement sans framework pour être déployable sur n’importe quel hébergement statique. Les nouvelles fonctionnalités doivent privilégier les modules `services`, `ui` et `utils` plutôt que d’agrandir `app.js`.
