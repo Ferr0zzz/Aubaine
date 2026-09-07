@@ -29,25 +29,9 @@ Pour vérifier la syntaxe JavaScript avant une mise en ligne :
 npm run check
 ```
 
-## Déployer sur Vercel
+## Lien Vercel
 
-Le projet est une application statique : aucun serveur backend ni variable secrète n’est nécessaire.
-
-### Depuis GitHub
-
-1. Importez le dépôt `BatmanGeekeur/Aubaine` sur [vercel.com/new](https://vercel.com/new).
-2. Sélectionnez le framework **Other** ou **No Framework**.
-3. Laissez le répertoire racine et la commande de build vides.
-4. Cliquez sur **Deploy**.
-
-Le fichier [`vercel.json`](./vercel.json) configure déjà les en-têtes de sécurité et le cache des fichiers statiques. Chaque push sur `main` déclenchera ensuite un nouveau déploiement si le dépôt est lié à Vercel.
-
-### Avec la CLI Vercel
-
-```bash
-npx vercel
-npx vercel --prod
-```
+[Ouvrir Vercel](https://vercel.com/new)
 
 ## Architecture
 

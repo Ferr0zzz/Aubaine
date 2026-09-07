@@ -3,6 +3,7 @@ node_modules/
 .vercel/
 .env
 .env.*
+.github/
 
 # OS and editor files
 .DS_Store
